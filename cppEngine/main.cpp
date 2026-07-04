@@ -1,6 +1,7 @@
 #include<iostream>
 #include "serial.h"
 #include "config.h"
+#include "weight.h"
 using namespace std;
 
 int main() {
@@ -24,6 +25,19 @@ int main() {
     if (bytesRead > 0){
         cout << "Recieved: " << buffer << endl;
     }
+
+    double weight = parseWeight(buffer);
+    if (weight == -1.0){
+        cout << "Failed to parse weight" << endl;
+    }
+    else if (isValidWeight(weight)== false){
+        cout << "Invalid weight reading: "<< weight << "KG"<< endl;
+    }
+    else{
+        cout << "Valid weight: " << weight << "KG" << endl;
+    }
+
+
     closeSerialPort(fd);
     return 0;
 }
