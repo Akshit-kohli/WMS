@@ -1,5 +1,6 @@
 # WMS
 WMS is a Weight bridge Management System.
+
 Working:-
 1. Vehicle arrives
 2. Operator enters: Customer name, phone, vehicle number,vehicle type, material type
