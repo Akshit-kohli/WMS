@@ -2,6 +2,9 @@
 #include "serial.h"
 #include "config.h"
 #include "weight.h"
+#include "transaction.h"
+#include "receipt.h"
+#include <string>
 using namespace std;
 
 int main() {
@@ -18,25 +21,77 @@ int main() {
 
     cout << "Serial port opened successfully" << endl;
     char buffer[BUFFER_SIZE];
+    int choice;
 
-    cout <<"Reading data from serial port.. " << endl;
-    int bytesRead = readFromSerial(fd , buffer, BUFFER_SIZE);
+    while(true){
+        cout << "--------------------- MENU ---------------------" << endl;
+        cout << "1. New Transaction" << endl;
+        cout << "2. Exit" << endl;
+        cout << "------------------------------------------------" << endl;
+        cout << "\n" << endl;
+        cout << "Enter your choice: " ;
+        cin >> choice;
+        
+        switch (choice) {
+            case 2:
+                cout << "Exiting the program." << endl;
+                closeSerialPort(fd);
+                return 0;
+            case 1:
+                transactionDetail transaction;
+                cout << "Enter Customer Name: ";
+                cin >> transaction.name;
+                cout << "Enter Phone Number: ";
+                cin >> transaction.phoneNumber;
+                cout << "Enter Vehicle Number: ";
+                cin >> transaction.vehicleNumber;
+                cout << "Enter Vehicle Type: ";
+                cin >> transaction.vehicleType;
+                cout << "Enter Material: ";
+                cin >> transaction.material;
+                cout << "Enter Rate per KG: ";
+                cin >> transaction.ratePerKG;
+                cout << "Enter Location: ";
+                cin >> transaction.location;
+                transaction.dateTime = getCurrentDateTime();
 
-    if (bytesRead > 0){
-        cout << "Recieved: " << buffer << endl;
-    }
 
-    double weight = parseWeight(buffer);
-    if (weight == -1.0){
-        cout << "Failed to parse weight" << endl;
-    }
-    else if (isValidWeight(weight)== false){
-        cout << "Invalid weight reading: "<< weight << "KG"<< endl;
-    }
-    else{
-        cout << "Valid weight: " << weight << "KG" << endl;
-    }
+                while(true){
+                    cout << "Place loaded vehicle on scale. Waiting for gross weight.." << endl;
+                    int bytesRead = readFromSerial(fd , buffer, BUFFER_SIZE);
+                    double gross = parseWeight(buffer);
 
+                    if(bytesRead > 0){
+                        if(gross != 0 && isValidWeight(gross)){
+                            captureGrossWeight(transaction, gross);
+                            cout << "Gross weight captured: " << transaction.grossWeight << " KG" << endl;
+                            break;
+                        }
+                        else{
+                            cout << "Failed to capture gross weight" << endl;
+                        }       
+                    }
+                }
+
+                while(true){
+                    cout << "Place empty vehicle on scale. Waiting for tare weight.." << endl;
+                    int bytesRead = readFromSerial(fd , buffer, BUFFER_SIZE);
+                    double tare = parseWeight(buffer);
+                    if(bytesRead > 0){
+                        if(tare != 0 && isValidWeight(tare)){
+                            captureTareWeight(transaction, tare);
+                            cout << "Tare weight captured: " << transaction.tareWeight << " KG" << endl;
+                            break;
+                        }
+                        else{
+                            cout << "Failed to capture tare weight" << endl;
+                        }
+                    }
+                }
+
+                printReceipt(transaction);
+        }
+    }
 
     closeSerialPort(fd);
     return 0;

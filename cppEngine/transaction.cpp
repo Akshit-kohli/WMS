@@ -17,6 +17,7 @@ transactionDetail createTransaction(
     string vehicleNumber,
     string vehicleType,
     string material,
+    double ratePerKG,
     string location
 ){
     transactionDetail transaction;
@@ -26,6 +27,7 @@ transactionDetail createTransaction(
     transaction.vehicleNumber = vehicleNumber;
     transaction.vehicleType = vehicleType;
     transaction.material = material;
+    transaction.ratePerKG = ratePerKG;
     transaction.location = location;
     transaction.dateTime = getCurrentDateTime();
     transaction.status = transactionStatus::CREATED;
@@ -35,4 +37,16 @@ transactionDetail createTransaction(
     transaction.price = 0.0;
 
     return transaction; 
+}
+
+void captureGrossWeight(transactionDetail &transaction, double grossWeight){
+    transaction.grossWeight = grossWeight;
+    transaction.status = transactionStatus::GROSS_CAPTURED;
+}
+
+void captureTareWeight(transactionDetail &transaction, double tareWeight){
+    transaction.tareWeight = tareWeight;
+    transaction.netWeight = transaction.grossWeight - transaction.tareWeight;
+    transaction.price = transaction.netWeight * transaction.ratePerKG;
+    transaction.status = transactionStatus::TARE_CAPTURED;
 }

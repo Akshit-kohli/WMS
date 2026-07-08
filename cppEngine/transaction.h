@@ -5,6 +5,7 @@ using namespace std;
 enum class transactionStatus{
         CREATED,
         GROSS_CAPTURED,
+        TARE_CAPTURED,
         COMPLETED
 };
 
@@ -14,6 +15,7 @@ struct transactionDetail{
     string vehicleNumber;
     string vehicleType;
     string material;
+    double ratePerKG;
     double grossWeight;
     double tareWeight;
     double netWeight;
@@ -29,10 +31,11 @@ transactionDetail createTransaction(
     string vehicleNumber,
     string vehicleType,
     string material,
+    double ratePerKG,
     string location
 );
 
 void captureGrossWeight(transactionDetail &transaction, double grossWeight);
 
-void captureTareWeight(transactionDetail &transaction, double weight, double ratePerKG);
+void captureTareWeight(transactionDetail &transaction, double tareWeight);
 string getCurrentDateTime();
