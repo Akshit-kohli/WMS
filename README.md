@@ -1,5 +1,6 @@
 # WMS
 WMS is a Weight bridge Management System.
+This project is build to be industry ready and compatible to most devices. 
 
 Working:-
 1. Vehicle arrives
