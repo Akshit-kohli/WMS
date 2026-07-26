@@ -13,7 +13,7 @@ A weighbridge machine sends weight readings over an RS-232 serial cable. The C++
 
 ---
 
-##W orking:-
+## Working:-
 
 ### C++ Engine
 1.Vehicle arrives at the weighbridge
