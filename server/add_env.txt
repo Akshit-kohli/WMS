@@ -1,0 +1,5 @@
+Make a file with directory name ".env".
+and edit the line given below and add it there with passowrd,host,port and database name filled in this correctly.
+
+
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
