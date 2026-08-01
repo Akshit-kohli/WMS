@@ -1,0 +1,6 @@
+enum TransactionStatus {
+  CREATED
+  GROSS_CAPTURED
+  COMPLETED
+  UNKNOWN
+}

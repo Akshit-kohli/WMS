@@ -1,0 +1,23 @@
+model Transaction {
+    id String @id @default(uuid()) @db.Uuid
+
+    name          String
+    phoneNumber   String
+    vehicleNumber String
+    vehicleType   String
+    material      String
+    ratePerKG     Float
+    grossWeight   Float
+    tareWeight    Float
+    netWeight     Float
+    price         Float
+    dateTime      String
+    location      String
+    status        TransactionStatus @default(CREATED)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([vehicleNumber])
+    @@index([status])
+}
